@@ -1,4 +1,4 @@
-package com.bjss.nhsd.a2si.capacityserviceclient;
+package com.nhsd.a2si.capacityserviceclient;
 
 import org.apache.http.HttpEntityEnclosingRequest;
 import org.apache.http.HttpRequest;
