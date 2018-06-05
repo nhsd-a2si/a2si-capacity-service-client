@@ -1,7 +1,7 @@
-package com.bjss.nhsd.a2si;
+package com.nhsd.a2si;
 
-import com.bjss.nhsd.a2si.capacityinformation.domain.CapacityInformation;
-import com.bjss.nhsd.a2si.capacityserviceclient.CapacityServiceStubClient;
+import com.nhsd.a2si.capacityinformation.domain.CapacityInformation;
+import com.nhsd.a2si.capacityserviceclient.CapacityServiceStubClient;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

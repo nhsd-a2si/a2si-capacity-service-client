@@ -1,8 +1,8 @@
-package com.bjss.nhsd.a2si;
+package com.nhsd.a2si;
 
-import com.bjss.nhsd.a2si.capacityinformation.domain.CapacityInformation;
-import com.bjss.nhsd.a2si.capacityserviceclient.CapacityServiceClientConfiguration;
-import com.bjss.nhsd.a2si.capacityserviceclient.CapacityServiceRestClient;
+import com.nhsd.a2si.capacityinformation.domain.CapacityInformation;
+import com.nhsd.a2si.capacityserviceclient.CapacityServiceClientConfiguration;
+import com.nhsd.a2si.capacityserviceclient.CapacityServiceRestClient;
 
 import org.junit.Before;
 import org.junit.Ignore;
