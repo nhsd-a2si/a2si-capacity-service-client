@@ -36,7 +36,7 @@ public class CapacityServiceStubClient implements CapacityServiceClient {
     @PostConstruct
     public void init() {
 
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(CapacityInformation.STRING_DATE_FORMAT);
 
         capacityInformationMap = new HashMap<>();
 
@@ -44,7 +44,6 @@ public class CapacityServiceStubClient implements CapacityServiceClient {
 
         capacityInformation = new CapacityInformation();
         capacityInformation.setServiceId("1234567890");
-        capacityInformation.setMessage("Message 0001");
 
         LocalDateTime localDateTime = LocalDateTime.now().minusHours(2);
         capacityInformation.setLastUpdated(dateTimeFormatter.format(localDateTime));
@@ -53,7 +52,6 @@ public class CapacityServiceStubClient implements CapacityServiceClient {
 
         capacityInformation = new CapacityInformation();
         capacityInformation.setServiceId("0987654321");
-        capacityInformation.setMessage("Message 0002");
         localDateTime = LocalDateTime.now().minusHours(4);
         capacityInformation.setLastUpdated(dateTimeFormatter.format(localDateTime));
 
@@ -61,7 +59,6 @@ public class CapacityServiceStubClient implements CapacityServiceClient {
 
         capacityInformation = new CapacityInformation();
         capacityInformation.setServiceId("1323777632");
-        capacityInformation.setMessage("Message 0003");
 
         localDateTime = LocalDateTime.now().minusHours(8);
         capacityInformation.setLastUpdated(dateTimeFormatter.format(localDateTime));
@@ -70,7 +67,6 @@ public class CapacityServiceStubClient implements CapacityServiceClient {
 
         capacityInformation = new CapacityInformation();
         capacityInformation.setServiceId("1323782502");
-        capacityInformation.setMessage("Message 0004");
 
         localDateTime = LocalDateTime.now().minusHours(16);
         capacityInformation.setLastUpdated(dateTimeFormatter.format(localDateTime));

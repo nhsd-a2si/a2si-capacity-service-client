@@ -43,7 +43,6 @@ public class CapacityServiceStubClientTests {
 
         CapacityInformation savedCapacityInformation = new CapacityInformation();
         savedCapacityInformation.setServiceId(defaultServiceId);
-        savedCapacityInformation.setMessage(defaultMessage);
         savedCapacityInformation.setLastUpdated(dateTimeFormatter.format(now));
 
         capacityServiceStubClient.saveCapacityInformation(savedCapacityInformation);
@@ -69,7 +68,6 @@ public class CapacityServiceStubClientTests {
 
         CapacityInformation capacityInformationToSave = new CapacityInformation();
         capacityInformationToSave.setServiceId(newServiceId);
-        capacityInformationToSave.setMessage(newMessage);
         capacityInformationToSave.setLastUpdated(dateTimeFormatter.format(now));
 
         capacityServiceStubClient.saveCapacityInformation(capacityInformationToSave);

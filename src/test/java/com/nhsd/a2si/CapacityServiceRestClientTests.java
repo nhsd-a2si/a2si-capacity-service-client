@@ -51,7 +51,6 @@ public class CapacityServiceRestClientTests {
 
         CapacityInformation savedCapacityInformation = new CapacityInformation();
         savedCapacityInformation.setServiceId(defaultServiceId);
-        savedCapacityInformation.setMessage(defaultMessage);
         savedCapacityInformation.setLastUpdated(dateTimeFormatter.format(now));
 
         capacityServiceRestClient.saveCapacityInformation(savedCapacityInformation);
