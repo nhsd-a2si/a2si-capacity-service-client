@@ -10,7 +10,9 @@ import javax.annotation.PostConstruct;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * The Capacity Service Stub client is a drop in replacement for the ReST based client.
@@ -76,11 +78,13 @@ public class CapacityServiceStubClient implements CapacityServiceClient {
     }
 
     @Override
-    public CapacityInformation getCapacityInformation(String serviceId) {
+    public Map<String, String> getCapacityInformation(Set<String> serviceIds) {
 
-        CapacityInformation capacityInformation = capacityInformationMap.get(serviceId);
+//        CapacityInformation capacityInformation = capacityInformationMap.get(serviceIds);
+//
+//        return capacityInformation;
 
-        return capacityInformation;
+        throw new RuntimeException("to do");
     }
 
     @Override
