@@ -10,6 +10,12 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 /*
   Capacity Service ReST client encapsulates the Rest template that makes the actual HTTP call to the capacity service
 */
@@ -51,32 +57,35 @@ public class CapacityServiceRestClient implements CapacityServiceClient {
         return new HttpHeaders() {{
             set(capacityServiceApiUsernameHttpHeaderName, capacityServiceApiUsername);
             set(capacityServiceApiPasswordHttpHeaderName, capacityServiceApiPassword);
+            set("Accept", "application/json");
+            set("Content-Type", "application/json");
 
         }};
     }
 
     @Override
-    public CapacityInformation getCapacityInformation(String serviceId) {
+    public Map<String, String> getCapacityInformation(Set<String> serviceIds) {
 
-        CapacityInformation capacityInformation;
+        Map<String, String> messages = new HashMap<>();
         try {
-            HttpEntity<?> httpEntity = new HttpEntity<>(createApiHeaders());
+            HttpEntity<String> httpEntity = new HttpEntity<String>(serviceIds.stream().map(id -> String.format("{\"id\":\"%s\"}", id)).collect(Collectors.joining(",", "[", "]")), createApiHeaders());
 
-            ResponseEntity<CapacityInformation> responseEntity =
+            logger.debug("Calling {}", capacityServiceUrl + "/services");
+            ResponseEntity<CapacityInformation[]> responseEntity =
                     capacityServiceClientRestTemplate.exchange(
-                            capacityServiceUrl + "/" + serviceId,
-                            HttpMethod.GET,
+                            capacityServiceUrl + "/services",
+                            HttpMethod.POST,
                             httpEntity,
-                            CapacityInformation.class);
-
-            capacityInformation = responseEntity.getBody();
-
+                            CapacityInformation[].class);
+            logger.debug("Response received from {}", capacityServiceUrl + "/services");
+            for(CapacityInformation ci: responseEntity.getBody()){
+                messages.put(ci.getServiceId(), ci.getMessage());
+            }
         } catch (Exception e) {
-            logger.error("Unable to get response from Capacity Service for Service Id {}", serviceId, e);
+            logger.error("Unable to get response from Capacity Service for Service Id {}", serviceIds, e);
             throw e;
         }
-
-        return capacityInformation;
+        return messages;
     }
 
     @Override
