@@ -37,26 +37,20 @@ public class CapacityServiceRestClient implements CapacityServiceClient {
     @Value("${capacity.service.client.api.url}")
     private String capacityServiceUrl;
 
-    @Value("${capacity.service.client.api.username}")
-    private String capacityServiceApiUsername;
-
-    @Value("${capacity.service.client.api.password}")
-    private String capacityServiceApiPassword;
-
+    @Autowired
     private RestTemplate capacityServiceClientRestTemplate;
 
     private static final String capacityServiceApiUsernameHttpHeaderName = "capacity-service-api-username";
     private static final String capacityServiceApiPasswordHttpHeaderName = "capacity-service-api-password";
 
-    @Autowired
+    public CapacityServiceRestClient(){}
+
     public CapacityServiceRestClient(RestTemplate capacityServiceClientRestTemplate) {
         this.capacityServiceClientRestTemplate = capacityServiceClientRestTemplate;
     }
 
     private HttpHeaders createApiHeaders() {
         return new HttpHeaders() {{
-            set(capacityServiceApiUsernameHttpHeaderName, capacityServiceApiUsername);
-            set(capacityServiceApiPasswordHttpHeaderName, capacityServiceApiPassword);
             set("Accept", "application/json");
             set("Content-Type", "application/json");
 
@@ -68,18 +62,26 @@ public class CapacityServiceRestClient implements CapacityServiceClient {
 
         Map<String, String> messages = new HashMap<>();
         try {
-            HttpEntity<String> httpEntity = new HttpEntity<String>(serviceIds.stream().map(id -> String.format("{\"id\":\"%s\"}", id)).collect(Collectors.joining(",", "[", "]")), createApiHeaders());
+            HttpHeaders apiHeaders = createApiHeaders();
 
-            logger.debug("Calling {}", capacityServiceUrl + "/services");
+            for(String id: serviceIds) {
+                apiHeaders.add("serviceId", id);
+            }
+
+            HttpEntity<String> httpEntity = new HttpEntity<String>(apiHeaders);
+
+            logger.debug("Calling {}", capacityServiceUrl + "/capacities");
             ResponseEntity<CapacityInformation[]> responseEntity =
                     capacityServiceClientRestTemplate.exchange(
-                            capacityServiceUrl + "/services",
-                            HttpMethod.POST,
+                            capacityServiceUrl + "/capacities",
+                            HttpMethod.GET,
                             httpEntity,
                             CapacityInformation[].class);
-            logger.debug("Response received from {}", capacityServiceUrl + "/services");
-            for(CapacityInformation ci: responseEntity.getBody()){
-                messages.put(ci.getServiceId(), ci.getMessage());
+            logger.debug("Response received from {}", capacityServiceUrl + "/capacities");
+            if(responseEntity.getBody() != null){
+                for(CapacityInformation ci: responseEntity.getBody()){
+                    messages.put(ci.getServiceId(), ci.getMessage());
+                }
             }
         } catch (Exception e) {
             logger.error("Unable to get response from Capacity Service for Service Id {}", serviceIds, e);
@@ -95,7 +97,7 @@ public class CapacityServiceRestClient implements CapacityServiceClient {
             HttpEntity <CapacityInformation> httpEntity = new HttpEntity<>(capacityInformation, createApiHeaders());
 
             capacityServiceClientRestTemplate.exchange(
-                    capacityServiceUrl,
+                    capacityServiceUrl + "/capacity",
                     HttpMethod.POST,
                     httpEntity,
                     CapacityInformation.class);
