@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
@@ -101,7 +102,13 @@ public class CapacityServiceRestClient implements CapacityServiceClient {
                     HttpMethod.POST,
                     httpEntity,
                     CapacityInformation.class);
-
+        } catch (HttpClientErrorException hcee) {
+            if (hcee.getStatusCode().value() == HttpStatus.BAD_REQUEST.value()) {
+            	logger.info("Validation error for Capacity Information {} in Capacity Service. ({})", capacityInformation, hcee.getResponseBodyAsString());
+            } else {
+                logger.error("Unable to save Capacity Information {} in Capacity Service", capacityInformation, hcee);
+                throw hcee;
+            }
         } catch (Exception e) {
             logger.error("Unable to save Capacity Information {} in Capacity Service", capacityInformation, e);
             throw e;
