@@ -86,7 +86,6 @@ public class CapacityServiceRestClient implements CapacityServiceClient {
             }
         } catch (Exception e) {
             logger.error("Unable to get response from Capacity Service for Service Id {}", serviceIds, e);
-            throw e;
         }
         return messages;
     }
