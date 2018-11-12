@@ -78,7 +78,7 @@ public class CapacityServiceStubClient implements CapacityServiceClient {
     }
 
     @Override
-    public Map<String, String> getCapacityInformation(Set<String> serviceIds) {
+    public Map<String, String> getCapacityInformation(Set<String> serviceIds, Long logHeaderId) {
 
 //        CapacityInformation capacityInformation = capacityInformationMap.get(serviceIds);
 //

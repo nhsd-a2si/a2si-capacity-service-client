@@ -7,7 +7,7 @@ import java.util.Set;
 
 public interface CapacityServiceClient {
 
-    Map<String, String> getCapacityInformation(Set<String> serviceIds);
+    Map<String, String> getCapacityInformation(Set<String> serviceIds, Long logHeaderId);
 
     void saveCapacityInformation(CapacityInformation capacityInformation);
 }

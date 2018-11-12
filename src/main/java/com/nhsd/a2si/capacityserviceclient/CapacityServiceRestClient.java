@@ -43,6 +43,7 @@ public class CapacityServiceRestClient implements CapacityServiceClient {
 
     private static final String capacityServiceApiUsernameHttpHeaderName = "capacity-service-api-username";
     private static final String capacityServiceApiPasswordHttpHeaderName = "capacity-service-api-password";
+    private static final String logHeaderIdName = "log-header-id";
 
     public CapacityServiceRestClient(){}
 
@@ -51,26 +52,29 @@ public class CapacityServiceRestClient implements CapacityServiceClient {
     }
 
     private HttpHeaders createApiHeaders() {
+    	return createApiHeaders(null);
+    }
+
+    private HttpHeaders createApiHeaders(Long logHeaderId) {
         return new HttpHeaders() {{
             set("Accept", "application/json");
             set("Content-Type", "application/json");
-
+            if (logHeaderId != null) {
+            	set(logHeaderIdName, ""+logHeaderId.intValue());
+            }
         }};
     }
 
     @Override
-    public Map<String, String> getCapacityInformation(Set<String> serviceIds) {
+    public Map<String, String> getCapacityInformation(Set<String> serviceIds, Long logHeaderId) {
 
         Map<String, String> messages = new HashMap<>();
         try {
             HttpHeaders apiHeaders = createApiHeaders();
-
             for(String id: serviceIds) {
                 apiHeaders.add("serviceId", id);
             }
-
             HttpEntity<String> httpEntity = new HttpEntity<String>(apiHeaders);
-
             logger.debug("Calling {}", capacityServiceUrl + "/capacities");
             ResponseEntity<CapacityInformation[]> responseEntity =
                     capacityServiceClientRestTemplate.exchange(
