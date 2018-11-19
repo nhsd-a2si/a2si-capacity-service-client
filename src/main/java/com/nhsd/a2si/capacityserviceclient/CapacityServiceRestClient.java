@@ -70,7 +70,7 @@ public class CapacityServiceRestClient implements CapacityServiceClient {
 
         Map<String, String> messages = new HashMap<>();
         try {
-            HttpHeaders apiHeaders = createApiHeaders();
+            HttpHeaders apiHeaders = createApiHeaders(logHeaderId);
             for(String id: serviceIds) {
                 apiHeaders.add("serviceId", id);
             }
