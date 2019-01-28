@@ -4,15 +4,24 @@ import com.nhsd.a2si.capacityinformation.domain.CapacityInformation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Profile;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * The Capacity Service Stub client is a drop in replacement for the ReST based client.
@@ -80,11 +89,21 @@ public class CapacityServiceStubClient implements CapacityServiceClient {
     @Override
     public Map<String, String> getCapacityInformation(Set<String> serviceIds, Long logHeaderId) {
 
-//        CapacityInformation capacityInformation = capacityInformationMap.get(serviceIds);
-//
-//        return capacityInformation;
+    	final Map<String, String> messages = new HashMap<>();
+    	final List<CapacityInformation> cis = new ArrayList<>();
+        
+    	for(String serviceId : serviceIds)
+    	{
+    		cis.add(createStubCapacityInfo(serviceId));
+    	}
+    	
+    	for(CapacityInformation ci: cis)
+    	{
+            messages.put(ci.getServiceId(), ci.getMessage());
+        }
 
-        throw new RuntimeException("to do");
+        return messages;
+
     }
 
     @Override
@@ -101,5 +120,25 @@ public class CapacityServiceStubClient implements CapacityServiceClient {
     @Override
     public String toString() {
         return "CapacityServiceStubClient{}";
+    }
+    
+    /**
+     * Returns dummy capacity information record with the service identifier passed in.
+     * Note that waiting time returned is random.
+     * 
+     * @param serviceId
+     * @return {@link CapacityInformation}
+     */
+    private CapacityInformation createStubCapacityInfo(String serviceId)
+    {
+    	CapacityInformation ci = new CapacityInformation();
+    	ci.setServiceId(serviceId);
+    	ci.setServiceName("Test Service " + serviceId);
+        ci.setWaitingTimeMins(ThreadLocalRandom.current().nextInt(1, 100));
+        
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    	ci.setLastUpdated(format.format( new Date()));
+    	
+    	return ci;
     }
 }
